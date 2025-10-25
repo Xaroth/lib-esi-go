@@ -1,0 +1,16 @@
+package {{.PackageName}}
+
+{{if .HasImports}}
+import (
+{{- range .OtherImports}}
+	"{{.}}"
+{{- end}}
+{{if and .CommonImports .OtherImports}}
+{{end}}
+{{- range .CommonImports}}
+	"{{.}}"
+{{- end}}
+)
+{{end}}
+
+type Output = {{.AliasType}}

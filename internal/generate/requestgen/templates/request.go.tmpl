@@ -1,0 +1,13 @@
+package {{.PackageName}}
+
+import (
+	"net/http"
+
+	"{{.RequestImport}}"
+)
+
+{{if .Static}}
+var Request = request.CreateStatic[{{.OutputType}}]({{.MethodConst}}, {{.PathLiteral}})
+{{else}}
+var Request = request.Create[Input, {{.OutputType}}]({{.MethodConst}}, {{.PathLiteral}})
+{{end}}

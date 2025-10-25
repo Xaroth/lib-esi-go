@@ -1,0 +1,10 @@
+{{define "int64"}}package {{.Package}}
+
+import "strconv"
+
+type Identifier int64
+
+func (id Identifier) String() string {
+	return strconv.FormatInt(int64(id), 10)
+}
+{{end}}

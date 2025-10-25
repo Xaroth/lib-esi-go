@@ -1,0 +1,29 @@
+{{define "test"}}package {{.TestPackage}}
+
+import (
+	"encoding/json"
+	"testing"
+
+	{{printf "%q" .ImportPath}}
+)
+{{range .Cases}}
+func Test{{.TypeName}}_JSONRoundTrip_{{.Index}}(t *testing.T) {
+	inputJSON := {{.InputJSON}}
+	var v {{.QualifiedType}}
+	if err := json.Unmarshal([]byte(inputJSON), &v); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+{{- if .WantConv}}
+	if v != {{.WantConv}} {
+		t.Fatalf("got %v want %v", v, {{.WantConv}})
+	}
+{{- end}}
+	out, err := json.Marshal(v)
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+	if string(out) != inputJSON {
+		t.Fatalf("round-trip: got %s want %s", out, inputJSON)
+	}
+}
+{{end}}{{end}}

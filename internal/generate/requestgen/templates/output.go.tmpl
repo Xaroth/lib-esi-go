@@ -1,0 +1,28 @@
+package {{.PackageName}}
+
+{{if .HasImports}}
+import (
+{{- range .OtherImports}}
+	"{{.}}"
+{{- end}}
+{{if and .CommonImports .OtherImports}}
+{{end}}
+{{- range .CommonImports}}
+	"{{.}}"
+{{- end}}
+)
+{{end}}
+
+type {{.RootName}} struct {
+{{- range .Fields}}
+	{{.Name}} {{.Type.Type}} `{{.TagKey}}:"{{.TagVal}}{{if .TagOmitEmpty}},omitempty{{end}}"`
+{{- end}}
+}
+{{- range .Nested}}
+
+type {{.Name}} struct {
+{{- range .Fields}}
+	{{.Name}} {{.Type.Type}} `{{.TagKey}}:"{{.TagVal}}{{if .TagOmitEmpty}},omitempty{{end}}"`
+{{- end}}
+}
+{{- end}}

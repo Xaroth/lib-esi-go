@@ -1,0 +1,68 @@
+name: Sync ESI compatibility date
+
+on:
+  schedule:
+    # Daily at 12:00 UTC
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-compatibility-date
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Update defaults.go compatibility date
+        run: |
+          set -euo pipefail
+          newest="$(curl -fsSL https://esi.evetech.net/meta/compatibility-dates | python3 -c "import json,sys; d=json.load(sys.stdin); dates=d.get('compatibility_dates') or []; print(max(dates) if dates else '')")"
+          if [[ -z "$newest" ]]; then
+            echo "failed to read compatibility_dates from ESI" >&2
+            exit 1
+          fi
+          current="$(grep -E '^[[:space:]]*CompatibilityDate[[:space:]]*=' defaults.go | head -1 | sed -E 's/^[[:space:]]*CompatibilityDate[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/')" || {
+            echo "failed to find CompatibilityDate in defaults.go" >&2
+            exit 1
+          }
+          if [[ -z "$current" ]]; then
+            echo "failed to parse CompatibilityDate from defaults.go" >&2
+            exit 1
+          fi
+          if [[ "$current" == "$newest" ]]; then
+            echo "CompatibilityDate already $newest"
+          else
+            echo "Updating CompatibilityDate: $current -> $newest"
+            sed -i -E 's/^([[:space:]]*)CompatibilityDate[[:space:]]*=[[:space:]]*"[^"]+"/\1CompatibilityDate = "'"$newest"'"/' defaults.go
+          fi
+
+      - name: Regenerate code
+        run: go generate ./...
+
+      - name: Commit and push changes
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          date="$(grep -E '^[[:space:]]*CompatibilityDate[[:space:]]*=' defaults.go | head -1 | sed -E 's/^[[:space:]]*CompatibilityDate[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/')"
+          git commit -m "chore: sync ESI compatibility date to ${date}"
+          git push

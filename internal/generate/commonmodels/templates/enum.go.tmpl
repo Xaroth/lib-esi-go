@@ -1,0 +1,17 @@
+{{define "enum"}}package {{.Package}}
+
+import "{{.ModulePath}}/enum"
+
+type {{.TypeName}} string
+
+func (v {{.TypeName}}) String() string {
+	return string(v)
+}
+
+type Enum struct {
+{{range .Fields}}	{{.Name}} {{$.TypeName}} `value:"{{.WireValue}}"`
+{{end}}}
+
+var {{.VarName}} = enum.New[Enum]()
+var Validator = enum.Validator[Enum, {{.TypeName}}]()
+{{end}}

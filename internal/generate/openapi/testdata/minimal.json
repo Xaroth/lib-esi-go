@@ -1,0 +1,334 @@
+{
+  "paths": {
+    "/alliances": {
+      "get": {
+        "operationId": "GetAlliances",
+        "parameters": [
+          { "$ref": "#/components/parameters/CompatibilityDate" }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/AllianceID" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alliances/{alliance_id}": {
+      "get": {
+        "operationId": "GetAlliancesAllianceId",
+        "parameters": [
+          {
+            "name": "alliance_id",
+            "in": "path",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/AllianceID" }
+          },
+          { "$ref": "#/components/parameters/CompatibilityDate" }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AllianceDetail" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/universe/factions": {
+      "get": {
+        "operationId": "GetUniverseFactions",
+        "parameters": [
+          { "$ref": "#/components/parameters/CompatibilityDate" }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UniverseFactionsGet" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/characters/affiliation": {
+      "post": {
+        "operationId": "PostCharactersAffiliation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": { "type": "integer", "format": "int64" }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CharactersAffiliationPost" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/universe/stargates/{stargate_id}": {
+      "get": {
+        "operationId": "GetUniverseStargatesStargateId",
+        "parameters": [
+          {
+            "name": "stargate_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          { "$ref": "#/components/parameters/CompatibilityDate" }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UniverseStargatesStargateIdGet" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/corporations/{corporation_id}/projects/{project_id}": {
+      "get": {
+        "operationId": "GetCorporationsProjectsDetail",
+        "parameters": [
+          {
+            "name": "corporation_id",
+            "in": "path",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/CorporationID" }
+          },
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          { "$ref": "#/components/parameters/CompatibilityDate" }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CorporationsProjectsDetail" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/characters/{character_id}/fittings/{fitting_id}": {
+      "delete": {
+        "operationId": "DeleteCharactersCharacterIdFittingsFittingId",
+        "parameters": [
+          {
+            "name": "character_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "fitting_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          { "$ref": "#/components/parameters/CompatibilityDate" }
+        ],
+        "responses": {
+          "204": { "description": "No Content" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AllianceID": {
+        "x-common-model": true,
+        "type": "integer",
+        "format": "int64"
+      },
+      "CorporationID": {
+        "x-common-model": true,
+        "type": "integer",
+        "format": "int64"
+      },
+      "CharacterID": {
+        "x-common-model": true,
+        "type": "integer",
+        "format": "int64"
+      },
+      "FactionID": {
+        "x-common-model": true,
+        "type": "integer",
+        "format": "int64"
+      },
+      "AllianceDetail": {
+        "type": "object",
+        "required": ["name", "ticker", "date_founded", "creator_id", "creator_corporation_id"],
+        "properties": {
+          "name": { "type": "string" },
+          "ticker": { "type": "string" },
+          "date_founded": { "type": "string", "format": "date-time" },
+          "creator_id": { "$ref": "#/components/schemas/CharacterID" },
+          "creator_corporation_id": { "$ref": "#/components/schemas/CorporationID" },
+          "faction_id": { "$ref": "#/components/schemas/FactionID" },
+          "executor_corporation_id": { "$ref": "#/components/schemas/CorporationID" }
+        }
+      },
+      "UniverseFactionsGet": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["faction_id", "name"],
+          "properties": {
+            "faction_id": { "type": "integer", "format": "int64" },
+            "name": { "type": "string" }
+          }
+        }
+      },
+      "UniverseStargatesStargateIdGet": {
+        "type": "object",
+        "required": ["id", "position"],
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "position": {
+            "type": "object",
+            "required": ["x", "y", "z"],
+            "properties": {
+              "x": { "type": "number", "format": "double" },
+              "y": { "type": "number", "format": "double" },
+              "z": { "type": "number", "format": "double" }
+            }
+          }
+        }
+      },
+      "CorporationsProjectsDetail": {
+        "type": "object",
+        "required": ["configuration", "identities"],
+        "properties": {
+          "configuration": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "manual": { "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmanual" }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "damage_ship": { "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationdamageship" }
+                }
+              }
+            ]
+          },
+          "identities": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "character_id": { "$ref": "#/components/schemas/CharacterID" }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "corporation_id": { "$ref": "#/components/schemas/CorporationID" }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "CorporationsProjectsDetailConfigurationmanual": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" }
+        }
+      },
+      "CorporationsProjectsDetailConfigurationdamageship": {
+        "type": "object",
+        "properties": {
+          "identities": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "character_id": { "$ref": "#/components/schemas/CharacterID" }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "CharactersAffiliationPost": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["character_id", "corporation_id"],
+          "properties": {
+            "character_id": { "type": "integer", "format": "int64" },
+            "corporation_id": { "type": "integer", "format": "int64" },
+            "alliance_id": { "type": "integer", "format": "int64" },
+            "faction_id": { "type": "integer", "format": "int64" }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "CompatibilityDate": {
+        "name": "X-Compatibility-Date",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string", "format": "date" }
+      },
+      "AcceptLanguage": {
+        "name": "Accept-Language",
+        "in": "header",
+        "schema": { "type": "string" }
+      },
+      "IfNoneMatch": {
+        "name": "If-None-Match",
+        "in": "header",
+        "schema": { "type": "string" }
+      },
+      "IfModifiedSince": {
+        "name": "If-Modified-Since",
+        "in": "header",
+        "schema": { "type": "string" }
+      },
+      "Tenant": {
+        "name": "X-Tenant",
+        "in": "header",
+        "schema": { "type": "string" }
+      }
+    }
+  }
+}

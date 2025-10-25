@@ -1,0 +1,8 @@
+{{define "string_alias"}}package {{.Package}}
+
+type {{.TypeName}} string
+
+func (v {{.TypeName}}) String() string {
+	return string(v)
+}
+{{end}}
