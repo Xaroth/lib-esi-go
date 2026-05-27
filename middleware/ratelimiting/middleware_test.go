@@ -18,6 +18,10 @@ func (f *fakeRateLimiter) Schedule(req *http.Request) (func(*http.Response), err
 	return func(*http.Response) {}, nil
 }
 
+func (f *fakeRateLimiter) ListBuckets() []*ratelimiting.BucketStatistics {
+	return []*ratelimiting.BucketStatistics{}
+}
+
 func TestMiddleware_skipsWithoutRoute(t *testing.T) {
 	t.Parallel()
 

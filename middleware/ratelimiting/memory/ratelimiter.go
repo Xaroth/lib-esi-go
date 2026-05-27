@@ -74,21 +74,6 @@ func (r *memoryRateLimiter) updateGroup(group *Group) *Group {
 	return group
 }
 
-func (r *memoryRateLimiter) ListBuckets() []*BucketInfo {
-	info := make([]*BucketInfo, 0)
-	r.bucketsMu.RLock()
-	defer r.bucketsMu.RUnlock()
-	for key, bucket := range r.buckets {
-		info = append(info, &BucketInfo{
-			group:           key.group,
-			owner:           key.owner,
-			effectiveTokens: bucket.EffectiveTokens(),
-			lastRequest:     bucket.lastRequest,
-		})
-	}
-	return info
-}
-
 func (r *memoryRateLimiter) getBucket(group *Group, owner int64) *Bucket {
 	if group == nil {
 		return nil
@@ -233,4 +218,21 @@ func (r *memoryRateLimiter) Schedule(req *http.Request) (func(*http.Response), e
 	return func(resp *http.Response) {
 		r.processResponse(route, owner, resp)
 	}, nil
+}
+
+func (r *memoryRateLimiter) ListBuckets() []*ratelimiting.BucketStatistics {
+	r.bucketsMu.RLock()
+	defer r.bucketsMu.RUnlock()
+
+	info := make([]*ratelimiting.BucketStatistics, len(r.buckets))
+	for key, bucket := range r.buckets {
+		info = append(info, &ratelimiting.BucketStatistics{
+			Group:           key.group.Name,
+			Owner:           key.owner,
+			EffectiveTokens: bucket.EffectiveTokens(),
+			LastRequest:     bucket.lastRequest,
+		})
+	}
+
+	return info
 }
