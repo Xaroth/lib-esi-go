@@ -10,6 +10,7 @@ import (
 	"github.com/xaroth/lib-esi-go/middleware/compatibilitydate"
 	"github.com/xaroth/lib-esi-go/middleware/language"
 	"github.com/xaroth/lib-esi-go/middleware/tenant"
+	"github.com/xaroth/lib-esi-go/middleware/tier"
 	"github.com/xaroth/lib-esi-go/middleware/timeout"
 	"github.com/xaroth/lib-esi-go/middleware/useragent"
 )
@@ -19,10 +20,10 @@ type transportChain struct {
 	middlewares []middleware.Middleware
 	chain       http.RoundTripper
 
-	defaultTenant            string
-	defaultLanguage          string
-	defaultTimeout           time.Duration
-	defaultCompatibilityDate string
+	defaultTier     string
+	defaultTenant   string
+	defaultLanguage string
+	defaultTimeout  time.Duration
 }
 
 func (c *transportChain) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -38,10 +39,10 @@ func newTransportChain(base http.RoundTripper) *transportChain {
 		middlewares: make([]middleware.Middleware, 0),
 		chain:       base,
 
-		defaultTenant:            defaults.Tenant,
-		defaultLanguage:          defaults.Language,
-		defaultTimeout:           defaults.RequestTimeout,
-		defaultCompatibilityDate: defaults.CompatibilityDate,
+		defaultTier:     defaults.Tier,
+		defaultTenant:   defaults.Tenant,
+		defaultLanguage: defaults.Language,
+		defaultTimeout:  defaults.RequestTimeout,
 	}
 }
 
@@ -58,6 +59,9 @@ func (c *transportChain) assemble() {
 
 // New constructs a transport chain with the default middlewares.
 // This is the recommended way to construct a transport chain for ESI requests.
+//
+// If providing additional middlewares, be mindful that those middlewares will run _before_ the default middlewares.
+// Additionally, they will run in reverse order; the first middleware in the chain will be the last middleware to be called.
 func New(applicationName, applicationVersion string, contact []string, compatibilityDate string, opts ...Option) http.RoundTripper {
 	chain := newTransportChain(http.DefaultTransport)
 	defer chain.assemble()
@@ -70,6 +74,7 @@ func New(applicationName, applicationVersion string, contact []string, compatibi
 	middlewares := []middleware.Middleware{
 		timeout.Middleware(chain.defaultTimeout),
 		useragent.Middleware(applicationName, applicationVersion, contact...),
+		tier.Middleware(chain.defaultTier),
 		compatibilitydate.Middleware(compatibilityDate),
 		language.Middleware(chain.defaultLanguage),
 		tenant.Middleware(chain.defaultTenant),

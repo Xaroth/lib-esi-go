@@ -25,3 +25,15 @@ func WithMiddlewares(middlewares ...middleware.Middleware) Option {
 		c.middlewares = append(c.middlewares, middlewares...)
 	}
 }
+
+func WithTier(tier string) Option {
+	return func(c *transportChain) {
+		c.defaultTier = tier
+	}
+}
+
+func WithTenant(tenant string) Option {
+	return func(c *transportChain) {
+		c.defaultTenant = tenant
+	}
+}
