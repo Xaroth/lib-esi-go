@@ -61,10 +61,11 @@ func (sb *structBuilder) buildFields(schema openapi.Schema, schemaName string, r
 			needsTime = true
 		}
 		fields = append(fields, StructField{
-			Name:   FieldNameFromWire(wire, commonName),
-			Type:   goType,
-			TagKey: tagKey,
-			TagVal: wire,
+			Name:        FieldNameFromWire(wire, commonName),
+			Type:        goType,
+			TagKey:      tagKey,
+			TagVal:      wire,
+			TagRequired: required && tagKey != "path",
 		})
 	}
 	return fields, needsTime, nil

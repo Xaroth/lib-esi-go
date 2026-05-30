@@ -137,8 +137,8 @@ func TestExtract(t *testing.T) {
 				in := &input{Q: "hello"}
 				return parameters.Extract(in)
 			},
-			expectedPath:  map[string]any{},
-			expectedQuery: url.Values{"q": {"hello"}},
+			expectedPath:   map[string]any{},
+			expectedQuery:  url.Values{"q": {"hello"}},
 			expectedHeader: http.Header{},
 		},
 		{
@@ -150,7 +150,7 @@ func TestExtract(t *testing.T) {
 				in := &input{H: "hdr-val"}
 				return parameters.Extract(in)
 			},
-			expectedPath: map[string]any{},
+			expectedPath:  map[string]any{},
 			expectedQuery: url.Values{},
 			expectedHeader: http.Header{
 				"X-H": {"hdr-val"},
@@ -203,6 +203,28 @@ func TestExtract(t *testing.T) {
 			},
 			// Expect a JSON marshaling error; we'll just assert non-nil.
 			expectedErr: errors.New("json error"),
+		},
+		{
+			name: "missing path parameter",
+			invoke: func() (map[string]any, url.Values, http.Header, io.Reader, error) {
+				type input struct {
+					PathID int `path:"id"`
+				}
+				in := &input{}
+				return parameters.Extract(in)
+			},
+			expectedErr: parameters.ErrRequiredValue,
+		},
+		{
+			name: "missing query parameter",
+			invoke: func() (map[string]any, url.Values, http.Header, io.Reader, error) {
+				type input struct {
+					QueryA string `query:"a" required:"true"`
+				}
+				in := &input{}
+				return parameters.Extract(in)
+			},
+			expectedErr: parameters.ErrRequiredValue,
 		},
 	}
 

@@ -134,6 +134,7 @@ type StructField struct {
 	TagKey       string // path, query, header, json
 	TagVal       string
 	TagOmitEmpty bool // append ,omitempty to JSON tag (oneOf unions)
+	TagRequired  bool // append required:"true" on input fields
 }
 
 // PackageModel is everything needed to render one operation package.

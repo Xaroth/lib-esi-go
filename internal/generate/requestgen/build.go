@@ -39,10 +39,11 @@ func BuildPackage(op Operation, spec *openapi.Spec, cfg Config) (PackageModel, e
 			tagKey = "header"
 		}
 		inputFields = append(inputFields, StructField{
-			Name:   FieldNameFromWire(p.Name, commonName),
-			Type:   goType,
-			TagKey: tagKey,
-			TagVal: p.Name,
+			Name:        FieldNameFromWire(p.Name, commonName),
+			Type:        goType,
+			TagKey:      tagKey,
+			TagVal:      p.Name,
+			TagRequired: p.Required && p.In != "path",
 		})
 	}
 
@@ -51,7 +52,7 @@ func BuildPackage(op Operation, spec *openapi.Spec, cfg Config) (PackageModel, e
 		if !ok {
 			return PackageModel{}, fmt.Errorf("%s: unsupported request body content type", op.OperationID)
 		}
-		bodyFields, nested, err := buildRequestBodyFields(mt.Schema, inSB)
+		bodyFields, nested, err := buildRequestBodyFields(mt.Schema, inSB, op.Spec.RequestBody.Required)
 		if err != nil {
 			return PackageModel{}, fmt.Errorf("%s request body: %w", op.OperationID, err)
 		}
@@ -84,7 +85,7 @@ func BuildPackage(op Operation, spec *openapi.Spec, cfg Config) (PackageModel, e
 	}, nil
 }
 
-func buildRequestBodyFields(schema openapi.SchemaRef, sb *structBuilder) ([]StructField, []StructDef, error) {
+func buildRequestBodyFields(schema openapi.SchemaRef, sb *structBuilder, bodyRequired bool) ([]StructField, []StructDef, error) {
 	s, _, err := sb.resolver.ResolveSchemaRef(schema)
 	if err != nil {
 		return nil, nil, err
@@ -107,10 +108,11 @@ func buildRequestBodyFields(schema openapi.SchemaRef, sb *structBuilder) ([]Stru
 				return nil, nil, err
 			}
 			return []StructField{{
-				Name:   BodyFieldName("", itemName),
-				Type:   goType,
-				TagKey: "body",
-				TagVal: "json",
+				Name:        BodyFieldName("", itemName),
+				Type:        goType,
+				TagKey:      "body",
+				TagVal:      "json",
+				TagRequired: bodyRequired,
 			}}, sb.nested, nil
 		}
 		if isObjectSchema(itemSchema) {
@@ -121,10 +123,11 @@ func buildRequestBodyFields(schema openapi.SchemaRef, sb *structBuilder) ([]Stru
 			}
 			sb.registerStruct(name, fields)
 			return []StructField{{
-				Name:   BodyFieldName("", itemName),
-				Type:   GoType{Type: "[]" + name},
-				TagKey: "body",
-				TagVal: "json",
+				Name:        BodyFieldName("", itemName),
+				Type:        GoType{Type: "[]" + name},
+				TagKey:      "body",
+				TagVal:      "json",
+				TagRequired: bodyRequired,
 			}}, sb.nested, nil
 		}
 		goType, itemCommon, err := sb.mapper.MapSchemaRef(itemRef, true)
@@ -134,10 +137,11 @@ func buildRequestBodyFields(schema openapi.SchemaRef, sb *structBuilder) ([]Stru
 		goType.Type = "[]" + strings.TrimPrefix(goType.Type, "*")
 		fieldName := BodyFieldName("", itemCommon)
 		return []StructField{{
-			Name:   fieldName,
-			Type:   goType,
-			TagKey: "body",
-			TagVal: "json",
+			Name:        fieldName,
+			Type:        goType,
+			TagKey:      "body",
+			TagVal:      "json",
+			TagRequired: bodyRequired,
 		}}, nil, nil
 	}
 
@@ -157,10 +161,11 @@ func buildRequestBodyFields(schema openapi.SchemaRef, sb *structBuilder) ([]Stru
 				return nil, nil, fmt.Errorf("property %q: %w", wire, err)
 			}
 			fields = append(fields, StructField{
-				Name:   FieldNameFromWire(wire, commonName),
-				Type:   goType,
-				TagKey: "body",
-				TagVal: "json",
+				Name:        FieldNameFromWire(wire, commonName),
+				Type:        goType,
+				TagKey:      "body",
+				TagVal:      "json",
+				TagRequired: required,
 			})
 		}
 		return fields, sb.nested, nil
@@ -171,10 +176,11 @@ func buildRequestBodyFields(schema openapi.SchemaRef, sb *structBuilder) ([]Stru
 		return nil, nil, err
 	}
 	return []StructField{{
-		Name:   FieldNameFromWire("body", commonName),
-		Type:   goType,
-		TagKey: "body",
-		TagVal: "json",
+		Name:        FieldNameFromWire("body", commonName),
+		Type:        goType,
+		TagKey:      "body",
+		TagVal:      "json",
+		TagRequired: bodyRequired,
 	}}, nil, nil
 }
 

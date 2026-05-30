@@ -127,6 +127,12 @@ func TestGeneratePackage_postAffiliation(t *testing.T) {
 	if !strings.Contains(string(files.Input), "[]int64") && !strings.Contains(string(files.Input), "body:") {
 		t.Errorf("input: %s", files.Input)
 	}
+	if !strings.Contains(string(files.Input), `required:"true"`) {
+		t.Errorf("input missing required tag: %s", files.Input)
+	}
+	if strings.Contains(string(files.Input), `""`) {
+		t.Errorf("input has malformed struct tag: %s", files.Input)
+	}
 	if !strings.Contains(string(files.Request), "[]*Output") {
 		t.Errorf("request: %s", files.Request)
 	}

@@ -15,14 +15,14 @@ import (
 
 type {{.RootName}} struct {
 {{- range .Fields}}
-	{{.Name}} {{.Type.Type}} `{{.TagKey}}:"{{.TagVal}}{{if .TagOmitEmpty}},omitempty{{end}}"`
+	{{.Name}} {{.Type.Type}} `{{.TagKey}}:"{{.TagVal}}{{if .TagOmitEmpty}},omitempty{{end}}"{{if .TagRequired}} required:"true"{{end}}`
 {{- end}}
 }
 {{- range .Nested}}
 
 type {{.Name}} struct {
 {{- range .Fields}}
-	{{.Name}} {{.Type.Type}} `{{.TagKey}}:"{{.TagVal}}{{if .TagOmitEmpty}},omitempty{{end}}"`
+	{{.Name}} {{.Type.Type}} `{{.TagKey}}:"{{.TagVal}}{{if .TagOmitEmpty}},omitempty{{end}}"{{if .TagRequired}} required:"true"{{end}}`
 {{- end}}
 }
 {{- end}}
