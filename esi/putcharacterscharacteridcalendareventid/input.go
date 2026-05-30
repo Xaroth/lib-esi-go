@@ -9,5 +9,5 @@ import (
 type Input struct {
 	Character character.Identifier `path:"character_id"`
 	EventId   int64                `path:"event_id"`
-	Response  string               `body:"json"`
+	Response  string               `body:"json" required:"true"`
 }

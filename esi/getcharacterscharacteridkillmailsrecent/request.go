@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, []*Output](http.MethodGet, "/characters/{character_id}/killmails/recent")
+var Request = request.Create[Input, []*Output](
+	http.MethodGet,
+	"/characters/{character_id}/killmails/recent",
+	request.WithRequiredScope("esi-killmails.read_killmails.v1"),
+)

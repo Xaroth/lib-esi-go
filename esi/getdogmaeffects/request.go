@@ -8,4 +8,7 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.CreateStatic[Output](http.MethodGet, "/dogma/effects")
+var Request = request.CreateStatic[Output](
+	http.MethodGet,
+	"/dogma/effects",
+)

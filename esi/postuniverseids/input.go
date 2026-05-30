@@ -3,5 +3,5 @@
 package postuniverseids
 
 type Input struct {
-	Body []string `body:"json"`
+	Body []string `body:"json" required:"true"`
 }

@@ -16,6 +16,6 @@ type Input struct {
 }
 
 type RouteConnection struct {
-	From solarsystem.Identifier `json:"from"`
-	To   solarsystem.Identifier `json:"to"`
+	From solarsystem.Identifier `json:"from" required:"true"`
+	To   solarsystem.Identifier `json:"to" required:"true"`
 }

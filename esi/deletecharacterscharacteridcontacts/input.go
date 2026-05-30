@@ -8,5 +8,5 @@ import (
 
 type Input struct {
 	Character  character.Identifier `path:"character_id"`
-	ContactIds []int64              `query:"contact_ids"`
+	ContactIds []int64              `query:"contact_ids" required:"true"`
 }

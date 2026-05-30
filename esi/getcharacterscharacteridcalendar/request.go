@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, []*Output](http.MethodGet, "/characters/{character_id}/calendar")
+var Request = request.Create[Input, []*Output](
+	http.MethodGet,
+	"/characters/{character_id}/calendar",
+	request.WithRequiredScope("esi-calendar.read_calendar_events.v1"),
+)

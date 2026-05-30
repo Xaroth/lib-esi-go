@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, Output](http.MethodGet, "/characters/{character_id}/implants")
+var Request = request.Create[Input, Output](
+	http.MethodGet,
+	"/characters/{character_id}/implants",
+	request.WithRequiredScope("esi-clones.read_implants.v1"),
+)

@@ -3,5 +3,5 @@
 package postuiopenwindowcontract
 
 type Input struct {
-	ContractId int64 `query:"contract_id"`
+	ContractId int64 `query:"contract_id" required:"true"`
 }

@@ -5,5 +5,5 @@ package putfleetsfleetidwingswingid
 type Input struct {
 	FleetId int64  `path:"fleet_id"`
 	WingId  int64  `path:"wing_id"`
-	Name    string `body:"json"`
+	Name    string `body:"json" required:"true"`
 }

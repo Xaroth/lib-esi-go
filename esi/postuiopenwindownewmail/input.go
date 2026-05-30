@@ -3,9 +3,9 @@
 package postuiopenwindownewmail
 
 type Input struct {
-	Body               string  `body:"json"`
-	Recipients         []int64 `body:"json"`
-	Subject            string  `body:"json"`
+	Body               string  `body:"json" required:"true"`
+	Recipients         []int64 `body:"json" required:"true"`
+	Subject            string  `body:"json" required:"true"`
 	ToCorpOrAllianceId *int64  `body:"json"`
 	ToMailingListId    *int64  `body:"json"`
 }

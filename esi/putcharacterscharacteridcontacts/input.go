@@ -9,7 +9,7 @@ import (
 type Input struct {
 	Character character.Identifier `path:"character_id"`
 	LabelIds  []int64              `query:"label_ids"`
-	Standing  float64              `query:"standing"`
+	Standing  float64              `query:"standing" required:"true"`
 	Watched   *bool                `query:"watched"`
-	Body      []int64              `body:"json"`
+	Body      []int64              `body:"json" required:"true"`
 }

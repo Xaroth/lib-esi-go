@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, struct{}](http.MethodPut, "/characters/{character_id}/contacts")
+var Request = request.Create[Input, struct{}](
+	http.MethodPut,
+	"/characters/{character_id}/contacts",
+	request.WithRequiredScope("esi-characters.write_contacts.v1"),
+)

@@ -8,4 +8,7 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/dogma/dynamic/items/{type_id}/{item_id}")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/dogma/dynamic/items/{type_id}/{item_id}",
+)

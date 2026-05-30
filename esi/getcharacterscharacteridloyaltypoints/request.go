@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, []*Output](http.MethodGet, "/characters/{character_id}/loyalty/points")
+var Request = request.Create[Input, []*Output](
+	http.MethodGet,
+	"/characters/{character_id}/loyalty/points",
+	request.WithRequiredScope("esi-characters.read_loyalty.v1"),
+)

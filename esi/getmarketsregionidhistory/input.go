@@ -4,5 +4,5 @@ package getmarketsregionidhistory
 
 type Input struct {
 	RegionId int64 `path:"region_id"`
-	TypeId   int64 `query:"type_id"`
+	TypeId   int64 `query:"type_id" required:"true"`
 }

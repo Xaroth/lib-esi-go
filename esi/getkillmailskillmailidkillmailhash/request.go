@@ -8,4 +8,7 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/killmails/{killmail_id}/{killmail_hash}")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/killmails/{killmail_id}/{killmail_hash}",
+)

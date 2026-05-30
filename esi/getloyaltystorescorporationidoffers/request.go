@@ -8,4 +8,7 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, []*Output](http.MethodGet, "/loyalty/stores/{corporation_id}/offers")
+var Request = request.Create[Input, []*Output](
+	http.MethodGet,
+	"/loyalty/stores/{corporation_id}/offers",
+)

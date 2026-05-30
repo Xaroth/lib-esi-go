@@ -4,8 +4,8 @@ package postfleetsfleetidmembers
 
 type Input struct {
 	FleetId     int64  `path:"fleet_id"`
-	CharacterId int64  `body:"json"`
-	Role        string `body:"json"`
+	CharacterId int64  `body:"json" required:"true"`
+	Role        string `body:"json" required:"true"`
 	SquadId     *int64 `body:"json"`
 	WingId      *int64 `body:"json"`
 }

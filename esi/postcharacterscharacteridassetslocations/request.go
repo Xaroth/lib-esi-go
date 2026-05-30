@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, []*Output](http.MethodPost, "/characters/{character_id}/assets/locations")
+var Request = request.Create[Input, []*Output](
+	http.MethodPost,
+	"/characters/{character_id}/assets/locations",
+	request.WithRequiredScope("esi-assets.read_assets.v1"),
+)

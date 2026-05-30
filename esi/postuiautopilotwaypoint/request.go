@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, struct{}](http.MethodPost, "/ui/autopilot/waypoint")
+var Request = request.Create[Input, struct{}](
+	http.MethodPost,
+	"/ui/autopilot/waypoint",
+	request.WithRequiredScope("esi-ui.write_waypoint.v1"),
+)

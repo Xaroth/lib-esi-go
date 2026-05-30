@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, Output](http.MethodPost, "/characters/{character_id}/cspa")
+var Request = request.Create[Input, Output](
+	http.MethodPost,
+	"/characters/{character_id}/cspa",
+	request.WithRequiredScope("esi-characters.read_contacts.v1"),
+)

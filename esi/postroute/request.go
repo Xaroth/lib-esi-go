@@ -8,4 +8,7 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodPost, "/route/{origin_system_id}/{destination_system_id}")
+var Request = request.Create[Input, *Output](
+	http.MethodPost,
+	"/route/{origin_system_id}/{destination_system_id}",
+)

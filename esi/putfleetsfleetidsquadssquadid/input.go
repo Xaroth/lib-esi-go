@@ -5,5 +5,5 @@ package putfleetsfleetidsquadssquadid
 type Input struct {
 	FleetId int64  `path:"fleet_id"`
 	SquadId int64  `path:"squad_id"`
-	Name    string `body:"json"`
+	Name    string `body:"json" required:"true"`
 }

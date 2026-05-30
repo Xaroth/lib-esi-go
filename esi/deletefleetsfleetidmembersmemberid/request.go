@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, struct{}](http.MethodDelete, "/fleets/{fleet_id}/members/{member_id}")
+var Request = request.Create[Input, struct{}](
+	http.MethodDelete,
+	"/fleets/{fleet_id}/members/{member_id}",
+	request.WithRequiredScope("esi-fleets.write_fleet.v1"),
+)

@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, Output](http.MethodGet, "/corporations/{corporation_id}/members/limit")
+var Request = request.Create[Input, Output](
+	http.MethodGet,
+	"/corporations/{corporation_id}/members/limit",
+	request.WithRequiredScope("esi-corporations.track_members.v1"),
+)

@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, struct{}](http.MethodDelete, "/characters/{character_id}/mail/labels/{label_id}")
+var Request = request.Create[Input, struct{}](
+	http.MethodDelete,
+	"/characters/{character_id}/mail/labels/{label_id}",
+	request.WithRequiredScope("esi-mail.organize_mail.v1"),
+)

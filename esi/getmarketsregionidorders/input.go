@@ -3,7 +3,7 @@
 package getmarketsregionidorders
 
 type Input struct {
-	OrderType string `query:"order_type"`
+	OrderType string `query:"order_type" required:"true"`
 	Page      *int32 `query:"page"`
 	RegionId  int64  `path:"region_id"`
 	TypeId    *int64 `query:"type_id"`

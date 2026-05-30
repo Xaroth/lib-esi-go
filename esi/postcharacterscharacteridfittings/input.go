@@ -8,14 +8,14 @@ import (
 
 type Input struct {
 	Character   character.Identifier `path:"character_id"`
-	Description string               `body:"json"`
-	Items       []Items              `body:"json"`
-	Name        string               `body:"json"`
-	ShipTypeId  int64                `body:"json"`
+	Description string               `body:"json" required:"true"`
+	Items       []Items              `body:"json" required:"true"`
+	Name        string               `body:"json" required:"true"`
+	ShipTypeId  int64                `body:"json" required:"true"`
 }
 
 type Items struct {
-	Flag     string `json:"flag"`
-	Quantity int64  `json:"quantity"`
-	TypeId   int64  `json:"type_id"`
+	Flag     string `json:"flag" required:"true"`
+	Quantity int64  `json:"quantity" required:"true"`
+	TypeId   int64  `json:"type_id" required:"true"`
 }

@@ -3,5 +3,5 @@
 package postcharactersaffiliation
 
 type Input struct {
-	Body []int64 `body:"json"`
+	Body []int64 `body:"json" required:"true"`
 }

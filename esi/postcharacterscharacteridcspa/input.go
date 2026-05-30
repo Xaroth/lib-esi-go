@@ -8,5 +8,5 @@ import (
 
 type Input struct {
 	Character character.Identifier `path:"character_id"`
-	Body      []int64              `body:"json"`
+	Body      []int64              `body:"json" required:"true"`
 }

@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/characters/{character_id}/access-lists/{access_list_id}")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/characters/{character_id}/access-lists/{access_list_id}",
+	request.WithRequiredScope("esi-access.read_lists.v1"),
+)

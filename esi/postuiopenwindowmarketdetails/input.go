@@ -3,5 +3,5 @@
 package postuiopenwindowmarketdetails
 
 type Input struct {
-	TypeId int64 `query:"type_id"`
+	TypeId int64 `query:"type_id" required:"true"`
 }

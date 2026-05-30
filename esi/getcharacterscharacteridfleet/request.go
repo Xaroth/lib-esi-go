@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/characters/{character_id}/fleet")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/characters/{character_id}/fleet",
+	request.WithRequiredScope("esi-fleets.read_fleet.v1"),
+)

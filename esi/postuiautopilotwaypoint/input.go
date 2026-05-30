@@ -3,7 +3,7 @@
 package postuiautopilotwaypoint
 
 type Input struct {
-	AddToBeginning      bool  `query:"add_to_beginning"`
-	ClearOtherWaypoints bool  `query:"clear_other_waypoints"`
-	DestinationId       int64 `query:"destination_id"`
+	AddToBeginning      bool  `query:"add_to_beginning" required:"true"`
+	ClearOtherWaypoints bool  `query:"clear_other_waypoints" required:"true"`
+	DestinationId       int64 `query:"destination_id" required:"true"`
 }

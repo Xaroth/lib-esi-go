@@ -8,4 +8,7 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/universe/systems/{system_id}")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/universe/systems/{system_id}",
+)

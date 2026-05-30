@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/corporations/{corporation_id}/freelance-jobs")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/corporations/{corporation_id}/freelance-jobs",
+	request.WithRequiredScope("esi-corporations.read_freelance_jobs.v1"),
+)

@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, Output](http.MethodPost, "/characters/{character_id}/mail")
+var Request = request.Create[Input, Output](
+	http.MethodPost,
+	"/characters/{character_id}/mail",
+	request.WithRequiredScope("esi-mail.send_mail.v1"),
+)

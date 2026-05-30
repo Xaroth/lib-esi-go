@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, struct{}](http.MethodDelete, "/characters/{character_id}/fittings/{fitting_id}")
+var Request = request.Create[Input, struct{}](
+	http.MethodDelete,
+	"/characters/{character_id}/fittings/{fitting_id}",
+	request.WithRequiredScope("esi-fittings.write_fittings.v1"),
+)

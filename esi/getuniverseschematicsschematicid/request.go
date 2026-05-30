@@ -8,4 +8,7 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/universe/schematics/{schematic_id}")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/universe/schematics/{schematic_id}",
+)

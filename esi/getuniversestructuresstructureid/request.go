@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, *Output](http.MethodGet, "/universe/structures/{structure_id}")
+var Request = request.Create[Input, *Output](
+	http.MethodGet,
+	"/universe/structures/{structure_id}",
+	request.WithRequiredScope("esi-universe.read_structures.v1"),
+)

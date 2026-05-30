@@ -9,12 +9,12 @@ import (
 type Input struct {
 	Character    character.Identifier `path:"character_id"`
 	ApprovedCost *int64               `body:"json"`
-	Body         string               `body:"json"`
-	Recipients   []Recipients         `body:"json"`
-	Subject      string               `body:"json"`
+	Body         string               `body:"json" required:"true"`
+	Recipients   []Recipients         `body:"json" required:"true"`
+	Subject      string               `body:"json" required:"true"`
 }
 
 type Recipients struct {
-	RecipientId   int64  `json:"recipient_id"`
-	RecipientType string `json:"recipient_type"`
+	RecipientId   int64  `json:"recipient_id" required:"true"`
+	RecipientType string `json:"recipient_type" required:"true"`
 }

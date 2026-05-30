@@ -7,8 +7,8 @@ import (
 )
 
 type Input struct {
-	Categories []string             `query:"categories"`
+	Categories []string             `query:"categories" required:"true"`
 	Character  character.Identifier `path:"character_id"`
-	Search     string               `query:"search"`
+	Search     string               `query:"search" required:"true"`
 	Strict     *bool                `query:"strict"`
 }

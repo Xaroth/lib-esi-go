@@ -8,5 +8,5 @@ import (
 
 type Input struct {
 	Corporation corporation.Identifier `path:"corporation_id"`
-	Body        []int64                `body:"json"`
+	Body        []int64                `body:"json" required:"true"`
 }

@@ -9,5 +9,5 @@ import (
 type Input struct {
 	Character character.Identifier `path:"character_id"`
 	Color     *string              `body:"json"`
-	Name      string               `body:"json"`
+	Name      string               `body:"json" required:"true"`
 }

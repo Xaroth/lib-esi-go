@@ -3,5 +3,5 @@
 package postuiopenwindowinformation
 
 type Input struct {
-	TargetId int64 `query:"target_id"`
+	TargetId int64 `query:"target_id" required:"true"`
 }

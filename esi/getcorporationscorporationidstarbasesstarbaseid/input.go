@@ -9,5 +9,5 @@ import (
 type Input struct {
 	Corporation corporation.Identifier `path:"corporation_id"`
 	StarbaseId  int64                  `path:"starbase_id"`
-	SystemId    int64                  `query:"system_id"`
+	SystemId    int64                  `query:"system_id" required:"true"`
 }

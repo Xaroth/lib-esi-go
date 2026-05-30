@@ -8,4 +8,8 @@ import (
 	"github.com/xaroth/lib-esi-go/request"
 )
 
-var Request = request.Create[Input, struct{}](http.MethodPost, "/ui/openwindow/contract")
+var Request = request.Create[Input, struct{}](
+	http.MethodPost,
+	"/ui/openwindow/contract",
+	request.WithRequiredScope("esi-ui.open_window.v1"),
+)
