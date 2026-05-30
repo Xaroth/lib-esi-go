@@ -8,10 +8,11 @@ import (
 	"github.com/xaroth/lib-esi-go/middleware"
 	"github.com/xaroth/lib-esi-go/middleware/authentication"
 	"github.com/xaroth/lib-esi-go/middleware/authentication/mock"
+	"github.com/xaroth/lib-esi-go/request"
 	"go.uber.org/mock/gomock"
 )
 
-//go:generate go run -mod=mod go.uber.org/mock/mockgen -build_flags=--mod=mod -destination=mock/mock_token.go -package=mock github.com/xaroth/lib-esi-go/middleware/authentication Token,RefreshableToken
+//go:generate go run -mod=mod go.uber.org/mock/mockgen -build_flags=--mod=mod -destination=mock/mock_token.go -package=mock github.com/xaroth/lib-esi-go/middleware/authentication Token,RefreshableToken,ScopedToken
 
 func TestMiddleware(t *testing.T) {
 	t.Parallel()
@@ -31,11 +32,16 @@ func TestMiddleware(t *testing.T) {
 	errorRefresh.EXPECT().RefreshIfNeeded(gomock.Any()).Return(refreshError).AnyTimes()
 	errorRefresh.EXPECT().Token().Times(0)
 
+	scoped := mock.NewMockScopedToken(ctrl)
+	scoped.EXPECT().Scopes().Return([]string{"scope1", "scope2"}).AnyTimes()
+	scoped.EXPECT().Token().Return("test-token").AnyTimes()
+
 	testCases := []struct {
-		name          string
-		token         authentication.Token
-		expectation   func(tb testing.TB, req *http.Request)
-		expectedError error
+		name           string
+		token          authentication.Token
+		requiredScopes []string
+		expectation    func(tb testing.TB, req *http.Request)
+		expectedError  error
 	}{
 		{
 			name:  "success: token is present",
@@ -75,14 +81,44 @@ func TestMiddleware(t *testing.T) {
 			token:         errorRefresh,
 			expectedError: refreshError,
 		},
+		{
+			name:           "error: missing token but scopes are required",
+			token:          nil,
+			requiredScopes: []string{"missing"},
+			expectedError:  authentication.ErrMissingToken,
+		},
+		{
+			name:           "success: token is scoped and scopes are present",
+			token:          scoped,
+			requiredScopes: []string{"scope1"},
+		},
+		{
+			name:           "success: token is scoped and at least one scope is present",
+			token:          scoped,
+			requiredScopes: []string{"scope2", "scope3"},
+		},
+		{
+			name:           "error: missing scopes but token is present",
+			token:          scoped,
+			requiredScopes: []string{"missing"},
+			expectedError:  authentication.ErrMissingScopes,
+		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			t.Parallel()
 
-			ctx := authentication.WithToken(testCase.token)(t.Context())
-			req, err := http.NewRequestWithContext(ctx, http.MethodGet, "/", nil)
+			reqInfo := request.FakeRequestInfo(
+				http.MethodGet,
+				"/",
+				request.WithRequiredScope(testCase.requiredScopes...),
+			)
+
+			ctx := request.BaseContext[any](t.Context(), reqInfo, "test", nil)
+
+			ctx = authentication.WithToken(testCase.token)(ctx)
+			req, err := http.NewRequestWithContext(ctx, reqInfo.Method, reqInfo.Path, nil)
 			if err != nil {
 				t.Fatalf("failed to create request: %v", err)
 			}

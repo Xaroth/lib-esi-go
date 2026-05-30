@@ -16,3 +16,9 @@ type RefreshableToken interface {
 	// Called to check if the token needs to be refreshed, and if so, refresh it.
 	RefreshIfNeeded(ctx context.Context) error
 }
+
+type ScopedToken interface {
+	Token
+
+	Scopes() []string
+}

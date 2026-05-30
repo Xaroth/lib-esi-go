@@ -15,7 +15,9 @@ func NewFakeMiddleware(tb testing.TB, validator func(tb testing.TB, req *http.Re
 	return MiddlewareFunc(func(req *http.Request) (*http.Response, error) {
 		tb.Helper()
 
-		validator(tb, req)
+		if validator != nil {
+			validator(tb, req)
+		}
 
 		return &http.Response{
 			StatusCode: http.StatusOK,
