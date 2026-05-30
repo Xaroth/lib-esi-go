@@ -140,6 +140,13 @@
     "/characters/{character_id}/fittings/{fitting_id}": {
       "delete": {
         "operationId": "DeleteCharactersCharacterIdFittingsFittingId",
+        "security": [
+          {
+            "OAuth2": [
+              "esi-fittings.write_fittings.v1"
+            ]
+          }
+        ],
         "parameters": [
           {
             "name": "character_id",

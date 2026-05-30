@@ -67,19 +67,20 @@ func BuildPackage(op Operation, spec *openapi.Spec, cfg Config) (PackageModel, e
 	static := len(inputFields) == 0
 
 	return PackageModel{
-		PackageName:   PackageNameFromOperationID(op.OperationID),
-		Method:        op.Method,
-		Path:          op.Path,
-		InputFields:   inputFields,
-		InputNested:   inputNested,
-		OutputFields:  outputFields,
-		OutputNested:  outputNested,
-		OutputType:    outputType,
+		PackageName:       PackageNameFromOperationID(op.OperationID),
+		Method:            op.Method,
+		Path:              op.Path,
+		InputFields:       inputFields,
+		InputNested:       inputNested,
+		OutputFields:      outputFields,
+		OutputNested:      outputNested,
+		OutputType:        outputType,
 		OutputAlias:       outputAlias,
 		OutputAliasGoType: outputAliasGoType,
 		NoOutputFile:      noOutputFile,
-		Static:        static,
-		NeedsTime:     needsTime,
+		Static:            static,
+		NeedsTime:         needsTime,
+		RequiredScopes:    openapi.RequiredOAuth2Scopes(op.Spec.Security),
 	}, nil
 }
 

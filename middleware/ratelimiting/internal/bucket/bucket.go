@@ -15,7 +15,7 @@ func GetRequestBucket(req *http.Request) int64 {
 	if token, ok := authentication.GetToken(ctx); ok {
 		owner := token.Owner()
 
-		if requiredScope == "" {
+		if len(requiredScope) == 0 {
 			return int64(-2) // Request is bucketed to the application.
 		}
 

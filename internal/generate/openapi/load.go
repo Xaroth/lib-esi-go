@@ -8,6 +8,11 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	defaults "github.com/xaroth/lib-esi-go"
+	"github.com/xaroth/lib-esi-go/middleware/compatibilitydate"
+	"github.com/xaroth/lib-esi-go/middleware/useragent"
+	"github.com/xaroth/lib-esi-go/transport"
 )
 
 // LoadSpec loads the OpenAPI spec from inputPath or by fetching url with X-Compatibility-Date.
@@ -35,14 +40,25 @@ func loadSpecFile(path string) (*Spec, error) {
 	return &spec, nil
 }
 
+var client = http.Client{
+	Transport: transport.NewChain(
+		http.DefaultTransport,
+		useragent.Middleware("", ""),
+		// The compatibility date will be overridden during request creation.
+		compatibilitydate.Middleware(defaults.CompatibilityDate),
+	),
+}
+
 func fetchSpec(ctx context.Context, url, compatibilityDate string) (*Spec, error) {
+	// Override the compatibility date for this request.
+	ctx = compatibilitydate.WithCompatibilityDate(compatibilityDate)(ctx)
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("X-Compatibility-Date", compatibilityDate)
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("fetch spec: %w", err)
 	}

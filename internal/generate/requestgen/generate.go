@@ -76,12 +76,14 @@ func GeneratePackage(m PackageModel, cfg Config) (GeneratedFiles, error) {
 	}
 
 	reqSrc, err := executeTemplate("request.go.tmpl", requestTemplateData{
-		PackageName:   m.PackageName,
-		RequestImport: cfg.requestImport(),
-		MethodConst:   methodConstFixed(m.Method),
-		PathLiteral:   pathLiteral(m.Path),
-		OutputType:    m.OutputType,
-		Static:        m.Static,
+		PackageName:           m.PackageName,
+		RequestImport:         cfg.requestImport(),
+		MethodConst:           methodConstFixed(m.Method),
+		PathLiteral:           pathLiteral(m.Path),
+		OutputType:            m.OutputType,
+		Static:                m.Static,
+		HasRequiredScopes:     len(m.RequiredScopes) > 0,
+		RequiredScopesLiteral: scopesLiteral(m.RequiredScopes),
 	})
 	if err != nil {
 		return out, err

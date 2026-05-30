@@ -32,7 +32,7 @@ type requestInfo struct {
 	Method        string
 	Path          string
 	Pattern       pattern.Pattern
-	RequiredScope string
+	RequiredScope []string
 }
 
 type RequestFunc[TInput any, TOutput any] func(ctx context.Context, sender RequestSender, input *TInput, opts ...RequestOption) (*Response[TOutput], error)
@@ -97,6 +97,10 @@ func Create[TInput any, TOutput any](method string, path string, opts ...CreateO
 			return nil, err
 		}
 
+		// Requests are always created using the default (live) API domain.
+		//
+		// If a different tier is is needed, you can accomplish this with the tier middleware,
+		// or by using the WithTier option when creating the transport chain.
 		url := defaults.Host.JoinPath(path)
 		url.RawQuery = queryParameters.Encode()
 

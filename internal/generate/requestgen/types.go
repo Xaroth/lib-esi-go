@@ -151,6 +151,7 @@ type PackageModel struct {
 	NoOutputFile  bool   // true only for 204 No Content (no output.go)
 	Static        bool
 	NeedsTime     bool
+	RequiredScopes []string
 }
 
 func collectImports(fields []StructField, cfg Config, needsTime bool) []string {

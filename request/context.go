@@ -17,11 +17,11 @@ func BaseContext[T any](ctx context.Context, req *requestInfo, requestKey string
 	return ctx
 }
 
-func GetRequiredScope(ctx context.Context) string {
+func GetRequiredScope(ctx context.Context) []string {
 	if req, ok := ctx.Value(requestInfoCtx{}).(*requestInfo); ok {
 		return req.RequiredScope
 	}
-	return ""
+	return nil
 }
 
 func GetRequestInput[T any](ctx context.Context) T {

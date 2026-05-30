@@ -187,4 +187,30 @@ func TestGeneratePackage_noContent204(t *testing.T) {
 	if !strings.Contains(req, `"/characters/{character_id}/fittings/{fitting_id}"`) {
 		t.Errorf("request path: %s", req)
 	}
+	if !strings.Contains(req, `request.WithRequiredScope("esi-fittings.write_fittings.v1")`) {
+		t.Errorf("request missing required scope: %s", req)
+	}
+}
+
+func TestGeneratePackage_noRequiredScope(t *testing.T) {
+	spec := gentest.LoadMinimalSpec(t)
+	ops, err := requestgen.FindOperations(spec, []string{"GetAlliances"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	cfg := requestgen.Config{LibModule: "github.com/xaroth/lib-esi-go", CommonSuffix: "common"}
+	pkg, err := requestgen.BuildPackage(ops[0], spec, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(pkg.RequiredScopes) != 0 {
+		t.Fatalf("RequiredScopes = %v, want none", pkg.RequiredScopes)
+	}
+	files, err := requestgen.GeneratePackage(pkg, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(files.Request), "WithRequiredScope") {
+		t.Errorf("public request should not declare scopes: %s", files.Request)
+	}
 }

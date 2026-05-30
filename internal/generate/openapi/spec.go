@@ -18,12 +18,16 @@ type Components struct {
 type PathItem map[string]Operation
 
 type Operation struct {
-	OperationID string              `json:"operationId"`
-	Summary     string              `json:"summary"`
-	Parameters  []ParameterRef      `json:"parameters"`
-	RequestBody *RequestBody        `json:"requestBody"`
-	Responses   map[string]Response `json:"responses"`
+	OperationID string                `json:"operationId"`
+	Summary     string                `json:"summary"`
+	Parameters  []ParameterRef        `json:"parameters"`
+	RequestBody *RequestBody          `json:"requestBody"`
+	Responses   map[string]Response   `json:"responses"`
+	Security    []SecurityRequirement `json:"security"`
 }
+
+// SecurityRequirement maps a security scheme name to required OAuth scopes.
+type SecurityRequirement map[string][]string
 
 type ParameterRef struct {
 	Ref string `json:"$ref"`

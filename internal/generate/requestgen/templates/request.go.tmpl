@@ -7,7 +7,15 @@ import (
 )
 
 {{if .Static}}
-var Request = request.CreateStatic[{{.OutputType}}]({{.MethodConst}}, {{.PathLiteral}})
+var Request = request.CreateStatic[{{.OutputType}}](
+	{{.MethodConst}},
+	{{.PathLiteral}},
+	{{if .HasRequiredScopes}}request.WithRequiredScope({{.RequiredScopesLiteral}}),
+{{end}})
 {{else}}
-var Request = request.Create[Input, {{.OutputType}}]({{.MethodConst}}, {{.PathLiteral}})
+var Request = request.Create[Input, {{.OutputType}}](
+	{{.MethodConst}},
+	{{.PathLiteral}},
+	{{if .HasRequiredScopes}}request.WithRequiredScope({{.RequiredScopesLiteral}}),
+{{end}})
 {{end}}

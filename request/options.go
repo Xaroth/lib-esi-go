@@ -6,8 +6,8 @@ type CreateOption func(*requestInfo)
 
 type RequestOption func(context.Context) context.Context
 
-func WithRequiredScope(scope string) CreateOption {
+func WithRequiredScope(scope ...string) CreateOption {
 	return func(info *requestInfo) {
-		info.RequiredScope = scope
+		info.RequiredScope = append(info.RequiredScope, scope...)
 	}
 }

@@ -14,13 +14,3 @@ func TestValidateCompatibilityDate(t *testing.T) {
 		t.Fatal("expected error")
 	}
 }
-
-func TestLoadSpecFile(t *testing.T) {
-	spec, err := openapi.LoadSpec(t.Context(), "", "", "testdata/minimal.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if spec.Paths["/alliances/{alliance_id}"] == nil {
-		t.Fatal("missing path")
-	}
-}

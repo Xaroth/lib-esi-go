@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"strconv"
+	"strings"
 	"sync"
 	"text/template"
 )
@@ -56,12 +57,14 @@ type fileTemplateData struct {
 }
 
 type requestTemplateData struct {
-	PackageName   string
-	RequestImport string
-	MethodConst   string
-	PathLiteral   string
-	OutputType    string
-	Static        bool
+	PackageName           string
+	RequestImport         string
+	MethodConst           string
+	PathLiteral           string
+	OutputType            string
+	Static                bool
+	HasRequiredScopes     bool
+	RequiredScopesLiteral string
 }
 
 func fileImportsForFields(fields []StructField, cfg Config, needsTime bool) (common, other []string) {
@@ -99,4 +102,12 @@ func methodConstFixed(method string) string {
 
 func pathLiteral(path string) string {
 	return strconv.Quote(path)
+}
+
+func scopesLiteral(scopes []string) string {
+	parts := make([]string, len(scopes))
+	for i, scope := range scopes {
+		parts[i] = strconv.Quote(scope)
+	}
+	return strings.Join(parts, ", ")
 }
