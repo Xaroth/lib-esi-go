@@ -9,7 +9,7 @@ import (
 const (
 	Language          = "en"
 	Tenant            = "tranquility"
-	CompatibilityDate = "2026-05-19"
+	CompatibilityDate = "2026-06-09"
 	RequestTimeout    = 10 * time.Second
 
 	Tier = "live"
