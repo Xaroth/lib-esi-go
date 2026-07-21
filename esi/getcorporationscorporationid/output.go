@@ -12,18 +12,33 @@ import (
 )
 
 type Output struct {
-	Alliance    *alliance.Identifier `json:"alliance_id"`
-	Ceo         character.Identifier `json:"ceo_id"`
-	Creator     character.Identifier `json:"creator_id"`
-	DateFounded *time.Time           `json:"date_founded"`
-	Description *string              `json:"description"`
-	Faction     *faction.Identifier  `json:"faction_id"`
-	HomeStation *station.Identifier  `json:"home_station_id"`
-	MemberCount int64                `json:"member_count"`
-	Name        string               `json:"name"`
-	Shares      *int64               `json:"shares"`
-	TaxRate     float64              `json:"tax_rate"`
-	Ticker      string               `json:"ticker"`
-	Url         *string              `json:"url"`
-	WarEligible *bool                `json:"war_eligible"`
+	Alliance        *alliance.Identifier       `json:"alliance_id"`
+	Ceo             *character.Identifier      `json:"ceo_id"`
+	Creator         *character.Identifier      `json:"creator_id"`
+	DateFounded     *time.Time                 `json:"date_founded"`
+	Description     string                     `json:"description"`
+	EnlistedFaction *faction.Identifier        `json:"enlisted_faction_id"`
+	FriendlyFire    string                     `json:"friendly_fire"`
+	HomeStation     station.Identifier         `json:"home_station_id"`
+	MemberCount     int64                      `json:"member_count"`
+	Name            string                     `json:"name"`
+	Palette         *CorporationsDetailPalette `json:"palette"`
+	Shares          int64                      `json:"shares"`
+	State           string                     `json:"state"`
+	TaxRates        CorporationsDetailTaxrates `json:"tax_rates"`
+	Ticker          string                     `json:"ticker"`
+	Type            string                     `json:"type"`
+	Url             *string                    `json:"url"`
+	WarEligible     bool                       `json:"war_eligible"`
+}
+
+type CorporationsDetailPalette struct {
+	MainColor      string  `json:"main_color"`
+	SecondaryColor *string `json:"secondary_color"`
+	TertiaryColor  *string `json:"tertiary_color"`
+}
+
+type CorporationsDetailTaxrates struct {
+	Isk          float64 `json:"isk"`
+	LoyaltyPoint float64 `json:"loyalty_point"`
 }
