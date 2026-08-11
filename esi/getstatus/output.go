@@ -10,5 +10,5 @@ type Output struct {
 	Players       int64     `json:"players"`
 	ServerVersion string    `json:"server_version"`
 	StartTime     time.Time `json:"start_time"`
-	Vip           *bool     `json:"vip"`
+	Vip           bool      `json:"vip"`
 }
