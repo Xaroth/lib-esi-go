@@ -2,8 +2,13 @@
 
 package getcharacterscharacteridship
 
+import (
+	"github.com/xaroth/lib-esi-go/common/item"
+	"github.com/xaroth/lib-esi-go/common/typeid"
+)
+
 type Output struct {
-	ShipItemId int64  `json:"ship_item_id"`
-	ShipName   string `json:"ship_name"`
-	ShipTypeId int64  `json:"ship_type_id"`
+	ShipItem item.Identifier   `json:"ship_item_id"`
+	ShipName string            `json:"ship_name"`
+	ShipType typeid.Identifier `json:"ship_type_id"`
 }

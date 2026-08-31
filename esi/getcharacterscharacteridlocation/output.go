@@ -2,8 +2,14 @@
 
 package getcharacterscharacteridlocation
 
+import (
+	"github.com/xaroth/lib-esi-go/common/item"
+	"github.com/xaroth/lib-esi-go/common/solarsystem"
+	"github.com/xaroth/lib-esi-go/common/station"
+)
+
 type Output struct {
-	SolarSystemId int64  `json:"solar_system_id"`
-	StationId     *int64 `json:"station_id"`
-	StructureId   *int64 `json:"structure_id"`
+	SolarSystem solarsystem.Identifier `json:"solar_system_id"`
+	Station     *station.Identifier    `json:"station_id"`
+	Structure   *item.Identifier       `json:"structure_id"`
 }
