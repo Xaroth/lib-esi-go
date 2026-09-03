@@ -3,10 +3,10 @@
 package getmetastatus
 
 type Output struct {
-	Routes []MetaStatusRoutestatus `json:"routes"`
+	Routes []MetaStatusRoute `json:"routes"`
 }
 
-type MetaStatusRoutestatus struct {
+type MetaStatusRoute struct {
 	Method string `json:"method"`
 	Path   string `json:"path"`
 	Status string `json:"status"`
