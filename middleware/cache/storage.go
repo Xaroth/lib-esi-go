@@ -39,7 +39,11 @@ func init() {
 	store.Register(CacheDriverName, driver.DriverFunc(func(u *url.URL) (driver.Conn, error) {
 		opts := make([]Option, 0)
 
+		query := u.Query()
+
 		switch {
+		case query.Has("path"):
+			opts = append(opts, WithPath(query.Get("path")))
 		case u.Host == ":memory:":
 			opts = append(opts, WithMemoryStore())
 		case u.Host == ".":
@@ -47,8 +51,6 @@ func init() {
 		default:
 			opts = append(opts, WithPath(u.Path))
 		}
-
-		query := u.Query()
 
 		if val := query.Get("driver"); val != "" {
 			opts = append(opts, WithDriver(val))
