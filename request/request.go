@@ -91,6 +91,9 @@ func Create[TInput any, TOutput any](method string, path string, opts ...CreateO
 		requestKey := createRequestKey(pathParameters, queryParameters, headerParameters)
 
 		ctx := BaseContext(bCtx, req, requestKey, input)
+		for _, opt := range opts {
+			ctx = opt(ctx)
+		}
 
 		path, err := pattern.String(pathParameters)
 		if err != nil {
